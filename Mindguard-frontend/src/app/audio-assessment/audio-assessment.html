@@ -1,0 +1,75 @@
+<div class="assessment-container">
+  <h2>Audio Assessment</h2>
+
+  <div *ngFor="let q of questions" class="question-card">
+    <!-- Question text with status dot -->
+    <p class="question-text">
+      {{ q.questionText }}
+      <span class="status-icon" 
+            [ngClass]="{
+              'submitted': isSubmitted(q.id),
+              'not-submitted': !isSubmitted(q.id),
+              'pulse': isPulsing(q.id)
+            }"
+            [attr.data-tooltip]="isSubmitted(q.id) ? 'Submitted ✅' : 'Not Submitted ❌'">
+        <span *ngIf="isSubmitted(q.id)" class="checkmark">✔</span>
+      </span>
+    </p>
+
+    <!-- Controls for users only -->
+    <div *ngIf="role === 'user'" class="recording-controls">
+      <button class="btn start-btn" 
+              [class.recording]="isRecording[q.id]" 
+              [disabled]="isRecording[q.id]"
+              (click)="startRecording(q.id)">
+        Start Recording
+      </button>
+      <button class="btn stop-btn" 
+              [disabled]="!isRecording[q.id]" 
+              (click)="stopRecording(q.id)">
+        Stop Recording
+      </button>
+      <button class="btn submit-btn" (click)="submitRecording(q.id)">
+        Submit Answer
+      </button>
+
+      <!-- Preview recorded audio -->
+      <div *ngIf="audioURL[q.id]" class="preview-audio">
+        <p>Preview:</p>
+        <audio [src]="audioURL[q.id]" controls></audio>
+      </div>
+    </div>
+
+    <!-- Message for non-users -->
+    <p *ngIf="role !== 'user'" class="restricted-msg">
+      Only users can submit answers
+    </p>
+  </div>
+
+  <hr>
+
+  <!-- All Submitted Answers -->
+<h3>All Submitted Answers</h3>
+<div class="answers-container">
+  <table class="answers-table">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Question ID</th>
+        <th>Audio</th>
+        <th>Submitted At</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let a of answers" 
+          [ngClass]="{'current-user': a.username === username}">
+        <td>{{ a.username }}</td>
+        <td>{{ a.questionId }}</td>
+        <td>
+          <audio *ngIf="a.filePath" [src]="'http://localhost:8080/' + a.filePath" controls></audio>
+        </td>
+        <td>{{ a.submittedAt | date:'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

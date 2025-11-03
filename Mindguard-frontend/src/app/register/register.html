@@ -1,0 +1,16 @@
+<div class="register-container">
+  <div class="register-box">
+    <h2>Register</h2>
+
+    <input type="text" [(ngModel)]="username" placeholder="Username" />
+    <input type="password" [(ngModel)]="password" placeholder="Password" />
+    <input type="text" [(ngModel)]="role" placeholder="Role (user/admin/parent)" />
+     <input type="password" placeholder="Confirm Password" [(ngModel)]="confirmpassword" name="confirmPassword" required>
+
+    <button (click)="register()">Register</button>
+    <p class="register-link">
+      Don’t have an account? 
+      <span class="highlight-link" (click)="goToLogin()">Login</span>
+    </p>
+  </div>
+</div>

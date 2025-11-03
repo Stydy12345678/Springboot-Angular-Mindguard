@@ -1,0 +1,27 @@
+<div class="quiz-container">
+  <h2>Quiz Assessment</h2>
+
+  <!-- Message for admins/parents -->
+  <p *ngIf="role !== 'user'" class="info-message">
+    You can view the quiz but cannot submit responses.
+  </p>
+
+  <div *ngFor="let q of questions; let i = index" class="question-block">
+    <p>{{i + 1}}. {{q.text}}</p>
+
+    <div *ngFor="let opt of q.options; let j = index">
+      <label>
+        <input type="radio"
+               name="question-{{q.questionId}}"
+               [(ngModel)]="answers[i].selectedOptionIndex"
+               [value]="j"
+               [disabled]="role !== 'user'"/> <!-- disable for admins/parents -->
+        {{opt}}
+      </label>
+    </div>
+  </div>
+
+  <button (click)="submitQuiz()" [disabled]="role !== 'user'">Submit Quiz</button>
+
+  <p *ngIf="successMessage">{{successMessage}}</p>
+</div>

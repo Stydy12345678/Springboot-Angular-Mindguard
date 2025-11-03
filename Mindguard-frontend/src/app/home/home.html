@@ -1,0 +1,37 @@
+
+
+<nav>
+  <a routerLink="welcome" routerLinkActive="active">Welcome</a> |
+  <!-- Assessment with dropdown -->
+  <div class="dropdown-container">
+    <a routerLink="/assessment" routerLinkActive="active" class="dropdown-toggle">
+      Assessment ▼
+    </a>
+    <ul class="dropdown">
+      <li><a routerLink="/assessment/quiz">Quiz Based Assessment</a></li>
+     <a routerLink="/assessment/audio">Audio Assessment</a>
+    </ul>
+  </div> |
+  
+  <a routerLink="alert" routerLinkActive="active">Alert</a>|
+  <a routerLink="chatboat" routerLinkActive="active">ChatBoat</a>|
+    <a routerLink="/moodtracker" routerLinkActive="active">MoodTracker</a>|
+    <a routerLink="/audio-therapy" routerLinkActive="active">AudioTherapy</a>|
+    
+     <div class="dropdown-container">
+    <a routerLink="/admin-dashboard" routerLinkActive="active" class="dropdown-toggle">
+       AdminDashboard ▼
+    </a>
+     <ul class="dropdown">
+   <li><a *ngIf="isAdmin" routerLink="/admin-dashboard/adminaudio" routerLinkActive="active">Admincontrol</a></li>
+     <li><a *ngIf="isAdmin" routerLink="/admin-dashboard/analytics" routerLinkActive="active">AdminAnalysis(AudioTherapy)</a></li>
+    </ul>
+  </div> |
+</nav>
+
+<hr>
+
+
+<!-- This is where child pages load -->
+<router-outlet></router-outlet>
+

@@ -1,0 +1,21 @@
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="logo">🛡️ MindGuard</div>
+  <ul>
+    <li><a routerLink="/home">Home</a></li>
+    <li><a routerLink="/login">Login</a></li>
+    <li><a routerLink="/register">Register</a></li>
+    <li><a routerLink="/about">About</a></li>
+    <li><a routerLink="/contact">Contact</a></li>
+  </ul>
+  <span class="spacer"></span>
+
+  <span *ngIf="username">Hello, {{ username }}!</span>
+  <button *ngIf="username" (click)="logout()">Logout</button>
+</nav>
+
+<!-- Page Content -->
+<router-outlet></router-outlet>
+
+
+

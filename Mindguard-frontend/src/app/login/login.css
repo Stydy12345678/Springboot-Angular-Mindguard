@@ -1,0 +1,83 @@
+/* Full page background */
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;   
+  align-items: center;       
+  background: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6v0Nd-ErbyWiRrQAamyozU6axCzIUgdO8IeS3I4DGYDLRLiWZqBeIxsN5OStH00dvX_I&usqp=CAU") no-repeat center center;
+  background-size: cover;    
+  font-family: Arial, sans-serif;
+}
+
+/* Box styling */
+.login-box {
+  background: rgba(255, 255, 255, 0.9); 
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 300px;
+}
+
+/* Input fields */
+.login-box input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+}
+
+/* Button */
+.login-box button {
+  width: 100%;
+  padding: 10px;
+  background: #2575fc;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-box button:hover {
+  background: #1a5edc;
+}
+.register-link {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.register-link a {
+  color: #2575fc;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+.highlight-link {
+  color: #2575fc;         /* blue */
+  font-weight: bold;      /* bold */
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.highlight-link:hover {
+  text-decoration: underline;
+  color: #1a5edc;        /* darker blue */
+}
+.forgot-text {
+  color: inherit;              /* same color as surrounding text */
+  text-decoration: underline;  /* classic link underline */
+  cursor: pointer;             /* shows the hand on hover */
+  font-size: 0.95rem;          /* adjust size if you like */
+}
+
+.forgot-text:hover {
+  text-decoration: none;       /* optional: remove underline on hover */
+}
+
