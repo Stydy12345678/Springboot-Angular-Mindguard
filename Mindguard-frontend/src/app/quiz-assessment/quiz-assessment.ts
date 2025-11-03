@@ -1,11 +1,8 @@
-
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
 import { Router } from '@angular/router';
-
 interface Question {
   questionId: number;
   text: string;
@@ -23,7 +20,7 @@ interface Answer {
   styleUrl: './quiz-assessment.css'
 })
 export class QuizAssessment implements OnInit {
-  router = inject(Router);
+ router = inject(Router);
   http = inject(HttpClient);
 
   questions: Question[] = [
@@ -39,10 +36,13 @@ export class QuizAssessment implements OnInit {
     { questionId: 10, text: 'Overall, how would you describe your current mental health?', options: ['Excellent', 'Good', 'Fair', 'Poor'] }
   ];
 
-   answers: Answer[] = [];
+  answers: Answer[] = [];
   successMessage = '';
+  moodResult = '';
+  message = '';
   role: string = '';
   canSubmit: boolean = false;
+  moodHistory: any[] = [];
 
   ngOnInit() {
     const username = localStorage.getItem('loggedInUser');
@@ -55,20 +55,12 @@ export class QuizAssessment implements OnInit {
     }
 
     this.role = role;
-    this.canSubmit = this.role === 'user'; // only 'user' can submit
-
+    this.canSubmit = this.role === 'user';
     this.answers = this.questions.map(q => ({ questionId: q.questionId, selectedOptionIndex: null }));
   }
 
   get allAnswered(): boolean {
     return this.answers.every(a => a.selectedOptionIndex !== null);
-  }
-
-  logout() {
-    localStorage.removeItem('loggedInUser');
-    localStorage.removeItem('role');
-    alert('You are logged out!');
-    this.router.navigate(['/login']);
   }
 
   submitQuiz() {
@@ -80,12 +72,11 @@ export class QuizAssessment implements OnInit {
     const username = localStorage.getItem('loggedInUser');
     if (!username) {
       alert('User not logged in!');
-      this.router.navigate(['/login']);
       return;
     }
 
     if (!this.allAnswered) {
-      alert('Please fill all the questions before submitting.');
+      alert('Please answer all questions before submitting.');
       return;
     }
 
@@ -96,17 +87,29 @@ export class QuizAssessment implements OnInit {
       selectedOption: this.questions.find(q => q.questionId === a.questionId)?.options[a.selectedOptionIndex!]
     }));
 
-    this.http.post('http://localhost:8080/api/quizzes/submit', payload, { responseType: 'text', withCredentials: true })
+    this.http.post('http://localhost:8080/api/quiz/submit', payload)
       .subscribe({
-        next: res => {
-          this.successMessage = '✅ Your response has been successfully submitted!';
-          this.answers = this.questions.map(q => ({ questionId: q.questionId, selectedOptionIndex: null }));
+        next: (res: any) => {
+          this.successMessage = '✅ Quiz submitted successfully!';
+          this.moodResult = res.mood;
+          this.message = res.message;
         },
-        error: err => alert(err.error || 'Error submitting quiz. Please try again.')
+        error: err => alert(err.error || 'Error submitting quiz.')
       });
   }
 
+  loadMoodHistory() {
+    const username = localStorage.getItem('loggedInUser');
+    const role = localStorage.getItem('role');
+    if (!username) return;
 
+    let url = role === 'user'
+      ? `http://localhost:8080/api/quiz/mood/${username}`
+      : `http://localhost:8080/api/quiz/mood/all`;
+
+    this.http.get(url).subscribe({
+      next: (res: any) => this.moodHistory = res,
+      error: err => alert(err.error || 'Error fetching mood history.')
+    });
+  }
 }
-
-

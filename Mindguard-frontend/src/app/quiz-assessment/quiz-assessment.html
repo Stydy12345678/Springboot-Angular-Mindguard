@@ -1,27 +1,65 @@
+<div class="full-background">
 <div class="quiz-container">
   <h2>Quiz Assessment</h2>
 
-  <!-- Message for admins/parents -->
+  <!-- Info for admin/parent -->
   <p *ngIf="role !== 'user'" class="info-message">
     You can view the quiz but cannot submit responses.
   </p>
 
+  <!-- Quiz Questions -->
   <div *ngFor="let q of questions; let i = index" class="question-block">
-    <p>{{i + 1}}. {{q.text}}</p>
+    <p>{{ i + 1 }}. {{ q.text }}</p>
 
     <div *ngFor="let opt of q.options; let j = index">
       <label>
         <input type="radio"
-               name="question-{{q.questionId}}"
+               name="question-{{ q.questionId }}"
                [(ngModel)]="answers[i].selectedOptionIndex"
                [value]="j"
-               [disabled]="role !== 'user'"/> <!-- disable for admins/parents -->
-        {{opt}}
+               [disabled]="role !== 'user'"/>
+        {{ opt }}
       </label>
     </div>
   </div>
 
+  <!-- Submit Button -->
   <button (click)="submitQuiz()" [disabled]="role !== 'user'">Submit Quiz</button>
 
-  <p *ngIf="successMessage">{{successMessage}}</p>
+  <!-- Mood Result -->
+  <div *ngIf="successMessage" class="result-box">
+    <h3>{{ successMessage }}</h3>
+    <p><strong>Your Mood:</strong> {{ moodResult }}</p>
+    <p><strong>Message:</strong> {{ message }}</p>
+  </div>
+
+  <hr>
+
+  <!-- Mood History -->
+  <button (click)="loadMoodHistory()">📜 View Mood History</button>
+
+  <div *ngIf="moodHistory.length > 0" class="history-box">
+    <h3>{{ role === 'user' ? 'Your Mood History' : 'All Users Mood History' }}</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Mood</th>
+          <th>Message</th>
+          <th *ngIf="role !== 'user'">Username</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of moodHistory">
+          <td>{{ item.dateTime | date:'mediumDate' }}</td> <!-- ✅ fixed field -->
+          <td>{{ item.dateTime | date:'shortTime' }}</td> <!-- ✅ fixed field -->
+          <td>{{ item.mood }}</td>
+          <td>{{ item.message }}</td>
+          <td *ngIf="role !== 'user'">{{ item.username }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 </div>

@@ -1,0 +1,262 @@
+/* 🌿 Overall Container */
+.contact-container {
+  font-family: 'Segoe UI', sans-serif;
+  color: #333333;
+  background-color: #f5fbfd;
+  padding-bottom: 50px;
+}
+
+/* 🧠 Header Section with Brain Background */
+.header-section {
+  background: url('https://cdn.pixabay.com/photo/2017/09/04/18/17/brain-2718869_1280.jpg') center/cover no-repeat;
+  height: 300px;
+  position: relative;
+  text-align: center;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-section .overlay {
+  background: rgba(0, 0, 0, 0.55);
+  width: 100%;
+  height: 100%;
+  padding: 40px 20px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.brand .logo {
+  width: 70px;
+  height: 70px;
+  filter: drop-shadow(2px 2px 3px #000);
+}
+
+.header-section h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.header-section h3 {
+  margin-top: 15px;
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.header-section p {
+  max-width: 700px;
+  margin: 10px auto 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ⚠️ Crisis Alert Box */
+.alert-box {
+  background-color: #ffebeb;
+  border-left: 5px solid #ff4d4d;
+  margin: 40px auto;
+  padding: 15px 20px;
+  max-width: 900px;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(255, 77, 77, 0.1);
+}
+
+.alert-box strong {
+  color: #c40000;
+  font-weight: 600;
+}
+
+/* 🧩 Support Section */
+.support-section {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+  gap: 20px;
+}
+
+/* Left - Resource Cards */
+.support-left {
+  flex: 1.2;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card .icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.card h4 {
+  color: #1d7a85;
+  margin-bottom: 10px;
+}
+
+.card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.card ul li {
+  margin: 8px 0;
+}
+
+.card a {
+  color: #008c99;
+  text-decoration: none;
+}
+
+.card a:hover {
+  text-decoration: underline;
+}
+
+/* Right - Contact Info */
+.support-right {
+  flex: 0.8;
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.support-right h3 {
+  color: #1d7a85;
+  margin-bottom: 15px;
+}
+
+.contact-cards {
+  display: grid;
+  gap: 15px;
+}
+
+.contact-card {
+  background: #f0faff;
+  border-radius: 10px;
+  padding: 15px;
+  border-left: 4px solid #007c89;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-3px);
+}
+
+.contact-card .icon {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+}
+
+/* ❓ FAQ Section */
+.faq-section {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+.faq-section h3 {
+  text-align: center;
+  color: #1d7a85;
+  margin-bottom: 20px;
+}
+
+.faq-card {
+  background: #fff;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.faq-card button {
+  width: 100%;
+  text-align: left;
+  background: #e6f7f9;
+  color: #007c89;
+  border: none;
+  padding: 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.faq-card button:hover {
+  background: #d0f0f3;
+}
+
+.faq-card p {
+  padding: 15px;
+  margin: 0;
+  line-height: 1.5;
+  background: white;
+}
+
+/* 🌈 Footer Highlights */
+.footer-highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 60px auto 0;
+  padding: 0 20px;
+}
+
+.footer-card {
+  background: #ffffff;
+  border-radius: 12px;
+  text-align: center;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+}
+
+.footer-card:hover {
+  transform: translateY(-4px);
+}
+
+.footer-card h4 {
+  color: #1d7a85;
+  margin-bottom: 10px;
+}
+
+.footer-card p {
+  color: #555;
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 900px) {
+  .support-section {
+    flex-direction: column;
+  }
+
+  .support-right {
+    order: -1;
+  }
+}

@@ -1,48 +1,49 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Audioservice } from '../audioservice';
+
+import { Router } from '@angular/router';
+
+import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Audioservice } from '../audioservice';
 
 @Component({
   selector: 'app-audio-assessment',
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule],
   templateUrl: './audio-assessment.html',
   styleUrl: './audio-assessment.css'
 })
 export class AudioAssessment implements OnInit {
-  // Store all questions and answers
-  questions: any[] = [];
+    questions: any[] = [];
   answers: any[] = [];
 
-  // Current logged-in user's role and username
-  role = 'user';
   username = '';
+  role = 'user';
 
-  // MediaRecorder & audio data
   mediaRecorder: any;
-  audioChunks: any = {}; // store chunks per question
-  audioBlob: any = {};   // final audio blob per question
-  audioURL: any = {};    // preview URL per question
-  isRecording: any = {}; // track recording state per question
-
-  // Track newly submitted questions to trigger pulse animation
+  audioChunks: any = {};
+  audioBlob: any = {};
+  audioURL: any = {};
+  isRecording: any = {};
+  detectedMood: any = {}; // local detection (for UI display only)
   submittedQuestions: number[] = [];
 
   constructor(private audioService: Audioservice) {}
 
   ngOnInit() {
-    // Get username and role from sessionStorage (stored at login)
-    this.username = sessionStorage.getItem('username') || '';
+    this.username = sessionStorage.getItem('username') || '';  // ✅ ADDED ensure always from sessionStorage
     this.role = sessionStorage.getItem('role') || 'user';
+    console.log('Logged in as', this.username, 'Role:', this.role);
 
-    console.log('Logged-in username:', this.username, 'Role:', this.role);
+    if (!this.username) {                                      // ✅ ADDED prevent blank username
+      alert('Please log in first before using audio assessment.');
+    }
 
-    // Load questions and previous answers
     this.loadQuestions();
     this.loadAnswers();
   }
 
-  // Fetch all questions from backend
+  // 🔹 Load all questions
   loadQuestions() {
     this.audioService.getQuestions().subscribe({
       next: data => this.questions = data,
@@ -50,7 +51,7 @@ export class AudioAssessment implements OnInit {
     });
   }
 
-  // Fetch all answers from backend
+  // 🔹 Load all answers
   loadAnswers() {
     this.audioService.getAnswers().subscribe({
       next: data => this.answers = data,
@@ -58,62 +59,104 @@ export class AudioAssessment implements OnInit {
     });
   }
 
-  // Start recording for a question
+  // 🎙 Start recording
   startRecording(qId: number) {
-    if (this.role !== 'user') return; // only users can record
+    if (this.role.toLowerCase() !== 'user') {
+      alert('Only users can record answers.');
+      return;
+    }
 
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
       this.mediaRecorder = new MediaRecorder(stream);
       this.audioChunks[qId] = [];
-      this.isRecording[qId] = true; // mark as recording
+      this.isRecording[qId] = true;
 
-      // Collect audio chunks
       this.mediaRecorder.ondataavailable = (e: any) => this.audioChunks[qId].push(e.data);
-
-      // When recording stops, create Blob and preview URL
-      this.mediaRecorder.onstop = () => {
+      this.mediaRecorder.onstop = async () => {
         this.audioBlob[qId] = new Blob(this.audioChunks[qId], { type: 'audio/wav' });
         this.audioURL[qId] = URL.createObjectURL(this.audioBlob[qId]);
         this.isRecording[qId] = false;
+
+        // Optional: local detection for UI preview only
+        this.detectMoodFromAudio(this.audioBlob[qId], qId);
       };
 
       this.mediaRecorder.start();
+    }).catch(err => {
+      console.error('Microphone access denied:', err);
+      alert('Microphone access is required to record audio.');
     });
   }
 
-  // Stop recording
+  // ⏹ Stop recording
   stopRecording(qId: number) {
-    if (this.mediaRecorder) this.mediaRecorder.stop();
+    if (this.mediaRecorder) {
+      this.mediaRecorder.stop();
+    }
   }
 
-  // Submit recorded audio
+  // 🎧 Optional: simple local mood detection (for display only)
+  async detectMoodFromAudio(blob: Blob, qId: number) {
+    try {
+      const arrayBuffer = await blob.arrayBuffer();
+      const audioCtx = new AudioContext();
+      const audioData = await audioCtx.decodeAudioData(arrayBuffer);
+
+      const channelData = audioData.getChannelData(0);
+      const rms = Math.sqrt(channelData.reduce((a, b) => a + b * b, 0) / channelData.length);
+      const duration = audioData.duration;
+
+      let mood = 'Neutral';
+      if (rms > 0.05 && duration < 3) mood = 'Angry';
+      else if (rms < 0.02 && duration > 4) mood = 'Sad';
+      else if (rms > 0.04 && duration > 3) mood = 'Happy';
+      else if (rms < 0.015) mood = 'Depressed';
+      else if (rms > 0.03 && duration > 5) mood = 'Motivated';
+      else if (rms < 0.03 && duration < 3) mood = 'Stressed';
+
+      this.detectedMood[qId] = mood;
+      console.log(`Detected mood for Q${qId}: ${mood}`);
+    } catch (err) {
+      console.error('Local mood detection failed:', err);
+      this.detectedMood[qId] = 'Unknown';
+    }
+  }
+
+  // 📤 Submit the recorded answer to backend
   submitRecording(qId: number) {
-    if (this.role !== 'user') {
-      alert('Only users can submit answers!');
+    if (this.role.toLowerCase() !== 'user') {
+      alert('Only users can submit answers.');
       return;
     }
 
     if (!this.audioBlob[qId]) {
-      alert('Please record audio first!');
+      alert('Please record audio first.');
       return;
     }
 
-    // Prepare file for submission
+    // ✅ ADDED: Ensure username and mood always set correctly
     const file = new File([this.audioBlob[qId]], `answer_q${qId}.wav`, { type: 'audio/wav' });
     const formData = new FormData();
     formData.append('file', file);
     formData.append('questionId', qId.toString());
-    formData.append('username', this.username);
+    formData.append('username', this.username);   // ✅ ADDED ensure correct logged-in user stored
     formData.append('role', this.role);
+    formData.append('mood', this.detectedMood[qId] || 'Unknown'); // ✅ ADDED send detected mood
 
-    // Submit to backend
+    console.log('Submitting data:', {
+      username: this.username,
+      role: this.role,
+      mood: this.detectedMood[qId],
+      questionId: qId
+    }); // ✅ ADDED debugging log
+
     this.audioService.submitAnswer(formData).subscribe({
       next: res => {
-        alert(res);                     // show backend message
-        this.submittedQuestions.push(qId); // trigger pulse animation
-        this.loadAnswers();              // reload all answers
+        alert(res);
+        this.submittedQuestions.push(qId);
+        this.loadAnswers();
 
-        // Remove pulse class after 1 second
+        // Pulse animation for short time
         setTimeout(() => {
           this.submittedQuestions = this.submittedQuestions.filter(id => id !== qId);
         }, 1000);
@@ -125,15 +168,12 @@ export class AudioAssessment implements OnInit {
     });
   }
 
-  // Check if the question is already submitted by this user
+  // ✅ Helper methods for UI
   isSubmitted(qId: number): boolean {
     return this.answers.some(a => a.questionId === qId && a.username === this.username);
   }
 
-  // Check if pulse animation should play
   isPulsing(qId: number): boolean {
     return this.submittedQuestions.includes(qId);
   }
-  
 }
-

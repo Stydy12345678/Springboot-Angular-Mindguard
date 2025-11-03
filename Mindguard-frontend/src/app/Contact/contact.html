@@ -1,0 +1,130 @@
+<div class="contact-container">
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="overlay">
+      <div class="brand">
+        <img src="https://cdn-icons-png.flaticon.com/512/2966/2966486.png" alt="MindGuard Logo" class="logo">
+        <h2>MindGuard</h2>
+      </div>
+      <h3>Contact Us</h3>
+      <p>We're here to support you. Reach out anytime for help with your mental health monitoring and wellness journey.</p>
+    </div>
+  </div>
+
+  <!-- Crisis Support Alert -->
+  <div class="alert-box">
+    <strong>⚠️ Crisis Support:</strong>
+    <p>If you're experiencing a mental health emergency, please call <strong>988</strong> (Suicide & Crisis Lifeline) or 911 immediately. 
+    Our team is also available 24/7 at <strong>+1 (800) 555-MIND</strong>.</p>
+  </div>
+
+  <!-- Support Resources and Contact Info -->
+  <div class="support-section">
+    <div class="support-left">
+      <h3>Support Resources</h3>
+      <div class="card-grid">
+        <div class="card">
+          <div class="icon">💚</div>
+          <h4>24/7 Crisis Support</h4>
+          <p>Immediate help available anytime you need it</p>
+          <ul>
+            <li>National Suicide Prevention Lifeline</li>
+            <li>Crisis Text Line: <a href="#">Text HOME to 741741</a></li>
+            <li>MindGuard Emergency Line: <strong>1-800-555-MIND</strong></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="icon">🧠</div>
+          <h4>Mental Health Resources</h4>
+          <ul>
+            <li><a href="#">Understanding Anxiety</a></li>
+            <li><a href="#">Depression Guide</a></li>
+            <li><a href="#">Stress Management Tips</a></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="icon">👥</div>
+          <h4>Community Support</h4>
+          <ul>
+            <li><a href="#">Support Groups</a></li>
+            <li><a href="#">Peer Counseling</a></li>
+            <li><a href="#">Family Resources</a></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="icon">📘</div>
+          <h4>Learn About MindGuard</h4>
+          <ul>
+            <li><a href="#">How It Works</a></li>
+            <li><a href="#">Features Overview</a></li>
+            <li><a href="#">Success Stories</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="support-right">
+      <h3>Get in Touch</h3>
+      <p>Our dedicated support team is here to assist you with any questions about MindGuard, technical issues, or general inquiries.</p>
+
+      <div class="contact-cards">
+        <div class="contact-card">
+          <div class="icon">📞</div>
+          <h4>Phone</h4>
+          <p>+1 (800) 555-MIND</p>
+          <small>Available 24/7 for crisis support</small>
+        </div>
+
+        <div class="contact-card">
+          <div class="icon">📧</div>
+          <h4>Email</h4>
+          <p>support@mindguard.com</p>
+          <small>We'll respond within 24 hours</small>
+        </div>
+
+        <div class="contact-card">
+          <div class="icon">📍</div>
+          <h4>Address</h4>
+          <p>123 Wellness Avenue, San Francisco, CA 94105</p>
+        </div>
+
+        <div class="contact-card">
+          <div class="icon">⏰</div>
+          <h4>Business Hours</h4>
+          <p>Monday - Friday, 9am - 6pm PST</p>
+          <small>Emergency support available 24/7</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ Section -->
+  <div class="faq-section">
+    <h3>Frequently Asked Questions</h3>
+    <div class="faq-card" *ngFor="let faq of faqs">
+      <button (click)="faq.open = !faq.open">{{faq.question}}</button>
+      <p *ngIf="faq.open">{{faq.answer}}</p>
+    </div>
+  </div>
+
+  <!-- Footer Highlights -->
+  <div class="footer-highlights">
+    <div class="footer-card">
+      <h4>Privacy First</h4>
+      <p>Your privacy is our top priority. All communications are confidential and secure.</p>
+    </div>
+
+    <div class="footer-card">
+      <h4>Quick Response</h4>
+      <p>We strive to respond to all inquiries within 24 hours during business days.</p>
+    </div>
+
+    <div class="footer-card">
+      <h4>Expert Support</h4>
+      <p>Our team includes mental health professionals and technical experts ready to help.</p>
+    </div>
+  </div>
+</div>

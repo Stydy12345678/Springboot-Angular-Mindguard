@@ -1,39 +1,67 @@
 package com.mindguard.backend.controller;
 
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.mindguard.backend.dto.quiz.SubmitAnswerDto;
-import com.mindguard.backend.services.QuizService;
-
-import jakarta.servlet.http.HttpSession;
+import com.mindguard.backend.model.MoodRecord;
+import com.mindguard.backend.repository.MoodRecordRepository;
+import com.mindguard.backend.services.MoodDetectionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @RestController
-@RequestMapping("/api/quizzes")
-@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+@RequestMapping("/api/quiz")
+@CrossOrigin(origins = "http://localhost:4200")
 public class QuizController {
 
-    private final QuizService quizService;
+    @Autowired
+    private MoodDetectionService moodDetectionService;
 
-    public QuizController(QuizService quizService) {
-        this.quizService = quizService;
-    }
+    @Autowired
+    private MoodRecordRepository moodRecordRepo;
 
+    // ✅ Receive quiz responses and detect mood
     @PostMapping("/submit")
-    public ResponseEntity<String> submitQuiz(@RequestBody List<SubmitAnswerDto> answers, HttpSession session) {
-        String role = (String) session.getAttribute("role");
-
-        if (!"user".equalsIgnoreCase(role)) {
-            return ResponseEntity.status(403).body("Only users can submit the quiz");
+    public Map<String, String> submitQuiz(@RequestBody List<Map<String, Object>> answers) {
+        if (answers == null || answers.isEmpty()) {
+            throw new RuntimeException("No answers submitted!");
         }
 
-        quizService.submitAnswers(answers);
-        return ResponseEntity.ok("success");
+        // Extract username from first answer (all have same user)
+        String username = (String) answers.get(0).get("userIdentifier");
+
+        // Convert selected options into array for mood detection
+        String[] userAnswers = answers.stream()
+                .map(a -> (String) a.get("selectedOption"))
+                .toArray(String[]::new);
+
+        // Detect mood and message
+        String mood = moodDetectionService.detectMood(userAnswers);
+        String message = moodDetectionService.generateMessage(mood);
+
+        // Save mood record
+        MoodRecord record = new MoodRecord();
+        record.setUsername(username);
+        record.setMood(mood);
+        record.setMessage(message);
+        record.setDateTime(LocalDateTime.now());
+        moodRecordRepo.save(record);
+
+        // Return result
+        Map<String, String> response = new HashMap<>();
+        response.put("mood", mood);
+        response.put("message", message);
+        return response;
+    }
+
+    // ✅ Get user's mood history
+    @GetMapping("/mood/{username}")
+    public List<MoodRecord> getUserMoodHistory(@PathVariable String username) {
+        return moodRecordRepo.findByUsernameOrderByDateTimeDesc(username);
+    }
+
+    // ✅ Get all mood records (for admin/parent)
+    @GetMapping("/mood/all")
+    public List<MoodRecord> getAllMoodHistory() {
+        return moodRecordRepo.findAllByOrderByDateTimeDesc();
     }
 }

@@ -1,92 +1,184 @@
-:host {
-  display: block;
+/* ===============================
+   QUIZ ASSESSMENT PAGE STYLES
+   =============================== */
+   .full-background {
   min-height: 100vh;
-  background-color: #9892b7; /* soft teal color for whole page */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.quiz-container {
-  max-width: 700px;
-  margin: 30px auto;
-  padding: 20px 30px;
-  background-color: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  font-family: Arial, sans-serif;
+  background-color: #d8f3dc; /* soothing mint green */
+  padding: 20px;
+  box-sizing: border-box;
 }
 
+.quiz-container {
+  max-width: 850px;
+  margin: 40px auto;
+  background: #f9fbfd;
+  border-radius: 16px;
+  padding: 30px 40px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+}
+
+/* Page Title */
 .quiz-container h2 {
   text-align: center;
-  color: #333;
+  color: #1a73e8;
+  font-size: 26px;
   margin-bottom: 20px;
 }
 
+/* Info Message */
 .info-message {
-  background-color: #fff3cd;
-  color: #856404;
-  border: 1px solid #ffeeba;
-  padding: 10px 15px;
-  border-radius: 8px;
-  margin-bottom: 20px;
   text-align: center;
-  font-weight: bold;
+  background: #e8f0fe;
+  color: #1a73e8;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  font-size: 15px;
 }
 
+/* Questions */
 .question-block {
-  margin-bottom: 20px;
-  padding: 15px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
+  margin-bottom: 25px;
+  padding: 15px 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.question-block:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.08);
 }
 
 .question-block p {
-  font-weight: bold;
+  font-weight: 600;
+  color: #2b3a67;
   margin-bottom: 10px;
-  color: #333;
 }
 
-label {
+/* Options */
+.question-block label {
   display: block;
-  margin-bottom: 8px;
+  background: #f2f6ff;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin: 6px 0;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-input[type="radio"] {
-  margin-right: 8px;
+.question-block input[type="radio"]:checked + label {
+  background: #dbeafe;
+  border-left: 4px solid #1a73e8;
 }
 
+.question-block label:hover {
+  background: #e7f0ff;
+}
+
+/* Buttons */
 button {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  background-color: #28a745; /* green */
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #1a73e8;
   color: white;
-  font-size: 16px;
-  font-weight: bold;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  font-weight: 500;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background: #155acb;
+  transform: scale(1.03);
 }
 
 button:disabled {
-  background-color: #a5d6a7; /* lighter green when disabled */
+  background: #b0c4de;
   cursor: not-allowed;
 }
 
-button:hover:enabled {
-  background-color: #218838; /* darker green on hover */
+/* Result Box */
+.result-box {
+  margin-top: 25px;
+  background: #e8f5e9;
+  border-left: 6px solid #43a047;
+  padding: 15px 20px;
+  border-radius: 10px;
+  color: #2e7d32;
+  text-align: center;
 }
 
-p.success-message {
-  color: #155724;
-  background-color: #d4edda;
-  border: 1px solid #c3e6cb;
-  padding: 10px;
-  border-radius: 8px;
+/* Mood History */
+.history-box {
+  margin-top: 25px;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+}
+
+.history-box h3 {
+  color: #1a73e8;
+  margin-bottom: 15px;
   text-align: center;
-  margin-top: 20px;
-  font-weight: bold;
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #e3e3e3;
+}
+
+th {
+  background-color: #f0f7ff;
+  color: #1a73e8;
+  font-weight: 600;
+}
+
+tr:hover {
+  background-color: #f9fcff;
+}
+
+/* Mood Text Colors */
+td:nth-child(3) {
+  font-weight: 600;
+}
+
+td:nth-child(3):contains("Happy") {
+  color: #43a047;
+}
+
+td:nth-child(3):contains("Sad") {
+  color: #e53935;
+}
+
+td:nth-child(3):contains("Stressed"),
+td:nth-child(3):contains("Anxious") {
+  color: #fb8c00;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .quiz-container {
+    padding: 20px;
+  }
+  table, th, td {
+    font-size: 13px;
+  }
+  button {
+    width: 100%;
+  }
 }
